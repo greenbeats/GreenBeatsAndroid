@@ -33,19 +33,21 @@ public class VideoPlayerActivity extends ActionBarActivity {
 	}
 	public void updateVideo(int start){
 		final int s = start;
-		Log.w("Video startTime :" , start+" ");
+		Log.w("Video startTime :" , s+" ");
 		
 		runOnUiThread(new Runnable(){
 			@Override
 			public void run(){
 				text.setText(s+"");
 				VideoView video = (VideoView)findViewById(R.id.videoView1);
-
+				
 				video.setOnPreparedListener(new MediaPlayer.OnPreparedListener(){
 					
 					@Override
 					public void onPrepared(MediaPlayer mp) {
-						mp.seekTo(1000);
+						Log.w("Video startTime :" , s+" ");
+						
+						mp.seekTo(s);
 						mp.setLooping(true);
 					}
 				});
@@ -56,7 +58,7 @@ public class VideoPlayerActivity extends ActionBarActivity {
 				
 			}
 		});
-			}
+	}
 	
 
 

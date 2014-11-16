@@ -34,6 +34,7 @@ public class PingThread extends Thread{
 				Log.w("Average delay :" , delay+" ");
 				float startTime = timeStamp % 10000;
 				startTime += delay;
+				startTime = startTime % 10000;
 
 				Log.w("startTime :" , startTime+" ");
 				player.updateVideo((int) startTime);
