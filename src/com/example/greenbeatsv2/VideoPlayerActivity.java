@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -19,11 +21,20 @@ public class VideoPlayerActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//Remove title bar
+	    this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+	    //Remove notification bar
+	    this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+	    this.setContentView(R.layout.activity_video_player);
+		
 		setContentView(R.layout.activity_video_player);
-		
-		video = (VideoView)findViewById(R.id.videoView1);
+	   
+
+	    video = (VideoView)findViewById(R.id.videoView1);
 		text = (TextView)findViewById(R.id.textView1);
-		
+		text.setText("Connecting...");
 		pingerThread = new PingThread(this);
 		pingerThread.start();
 		
@@ -31,14 +42,15 @@ public class VideoPlayerActivity extends ActionBarActivity {
 
 		
 	}
-	public void updateVideo(int start){
+	public void updateVideo(int start, long userCount){
 		final int s = start;
+		final double u = userCount;
 		Log.w("Video startTime :" , s+" ");
 		
 		runOnUiThread(new Runnable(){
 			@Override
 			public void run(){
-				text.setText(s+"");
+				text.setText("breathing with " + u +" others");
 				VideoView video = (VideoView)findViewById(R.id.videoView1);
 				
 				video.setOnPreparedListener(new MediaPlayer.OnPreparedListener(){
@@ -54,8 +66,6 @@ public class VideoPlayerActivity extends ActionBarActivity {
 				String path = "android.resource://"+getPackageName()+"/"+R.raw.pcm;
 				video.setVideoURI(Uri.parse(path));
 				video.start();
-				
-				
 			}
 		});
 	}

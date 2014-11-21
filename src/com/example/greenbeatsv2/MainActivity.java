@@ -6,6 +6,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 public class MainActivity extends ActionBarActivity {
@@ -13,9 +15,17 @@ public class MainActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		//Remove title bar
+	    this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+	    //Remove notification bar
+	    this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+	    
+	    this.setContentView(R.layout.activity_main);
 		setContentView(R.layout.activity_main);
-		
-		bg = (ImageView)findViewById(R.id.imageView1);
+
+	    bg = (ImageView)findViewById(R.id.imageView1);
 		
 		backGroundListener();
 	}

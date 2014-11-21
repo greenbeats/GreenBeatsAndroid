@@ -6,13 +6,15 @@ import com.example.greenbeatsv2.VideoPlayerActivity;
 
 public class PingThread extends Thread{
 	private final int PING_INTERVAL = 30000;
-	
+	private final int PING_REQUESTS = 3;
+	private final int VIDEO_LENGTH = 10000;
 	private VideoPlayerActivity player;
 	private Boolean running;
 	
 	private long delay;
 	private float timeStamp;
 	private boolean lock;
+	private long userCount;
 	
 	public PingThread(VideoPlayerActivity player){
 		this.player = player;
@@ -23,21 +25,26 @@ public class PingThread extends Thread{
 		while(true){
 			while(running){
 				delay = 0;
-				for(int i = 0; i < 10 ; i++){
+				for(int i = 0; i < PING_REQUESTS ; i++){
 					lock = true;
 					Pinger pinger = new Pinger(this);
 					pinger.execute();
 					while(lock);
 				}
-				delay = delay/10;
+				
+				// average delay
+				delay = delay/PING_REQUESTS;
 				
 				Log.w("Average delay :" , delay+" ");
-				float startTime = timeStamp % 10000;
+				
+				//mod startTime by length of video
+				//add delay to startTime
+				float startTime = timeStamp % VIDEO_LENGTH;
 				startTime += delay;
-				startTime = startTime % 10000;
+				startTime = startTime % VIDEO_LENGTH;
 
 				Log.w("startTime :" , startTime+" ");
-				player.updateVideo((int) startTime);
+				player.updateVideo((int) startTime, userCount);
 				try {
 					sleep(PING_INTERVAL);
 				} catch (InterruptedException e) {
@@ -56,6 +63,9 @@ public class PingThread extends Thread{
 	public void setRunning(Boolean x)
 	{
 		running = x;
+	}
+	public void setUserCount(long u) {
+		userCount = u;
 	}
 
 }
