@@ -26,7 +26,7 @@
         <activity
             android:name=".VideoPlayerActivity"
             android:label="@string/title_activity_video_player" 
-            android:screenOrientation="landscape"> 
+            android:screenOrientation="portrait"> 
             
         </activity>
     </application>

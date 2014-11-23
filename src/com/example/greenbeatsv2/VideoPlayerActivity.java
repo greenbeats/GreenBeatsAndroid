@@ -1,5 +1,6 @@
 package com.example.greenbeatsv2;
 
+import android.annotation.SuppressLint;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,7 +10,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.VideoView;
-
 import com.example.gbHelpers.PingThread;
 
 public class VideoPlayerActivity extends ActionBarActivity {
@@ -18,6 +18,7 @@ public class VideoPlayerActivity extends ActionBarActivity {
 	private TextView text;
 	private float videoTime;
 	private VideoView video;
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,8 +35,10 @@ public class VideoPlayerActivity extends ActionBarActivity {
 
 	    video = (VideoView)findViewById(R.id.videoView1);
 		text = (TextView)findViewById(R.id.textView1);
+		text.setRotation(90);
 		text.setText("Connecting...");
 		pingerThread = new PingThread(this);
+		pingerThread.setDaemon(true);
 		pingerThread.start();
 		
 		
@@ -50,15 +53,13 @@ public class VideoPlayerActivity extends ActionBarActivity {
 		runOnUiThread(new Runnable(){
 			@Override
 			public void run(){
-				text.setText("breathing with " + u +" others");
+				text.setText("breathing with " + (int)u +" others");
 				VideoView video = (VideoView)findViewById(R.id.videoView1);
 				
 				video.setOnPreparedListener(new MediaPlayer.OnPreparedListener(){
-					
 					@Override
 					public void onPrepared(MediaPlayer mp) {
 						Log.w("Video startTime :" , s+" ");
-						
 						mp.seekTo(s);
 						mp.setLooping(true);
 					}

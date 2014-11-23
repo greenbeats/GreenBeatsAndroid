@@ -48,7 +48,6 @@ public class Pinger extends AsyncTask<String, Void, Void> {
 			Log.w("content : ", content);
 			try {
 				JSONObject obj = new JSONObject(content);
-//				JSONObject obj = new JSONObject("{\"time\":1416595726805670161,\"count\":1}");
 				timeStamp = obj.getLong("time");
 				userCount = obj.getLong("count");
 				Log.w("timestamp : ", timeStamp+ " "+ userCount);
