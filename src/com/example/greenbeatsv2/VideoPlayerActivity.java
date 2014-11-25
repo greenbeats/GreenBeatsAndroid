@@ -1,3 +1,11 @@
+/*
+*
+* Author: George Macrae 
+*
+* 2014
+*
+*/
+
 package com.example.greenbeatsv2;
 
 import android.annotation.SuppressLint;
@@ -11,6 +19,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.VideoView;
 import com.example.gbHelpers.PingThread;
+
+
 
 public class VideoPlayerActivity extends ActionBarActivity {
 
@@ -27,28 +37,28 @@ public class VideoPlayerActivity extends ActionBarActivity {
 
 	    //Remove notification bar
 	    this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
 	    this.setContentView(R.layout.activity_video_player);
-		
 		setContentView(R.layout.activity_video_player);
 	   
 
+		// initialize views
 	    video = (VideoView)findViewById(R.id.videoView1);
 		text = (TextView)findViewById(R.id.textView1);
 		text.setRotation(90);
 		text.setText("Connecting...");
+	
+		// create pinger thread
 		pingerThread = new PingThread(this);
 		pingerThread.setDaemon(true);
 		pingerThread.start();
-		
-		
-
-		
 	}
+
+	// updateVideo is called by pingerThread with the start time and user Count
+	// updateVideo sets the video time to the passed time and the user count to the passed userCount
 	public void updateVideo(int start, long userCount){
 		final int s = start;
 		final double u = userCount;
-		Log.w("Video startTime :" , s+" ");
+//		Log.w("Video startTime :" , s+" ");
 		
 		runOnUiThread(new Runnable(){
 			@Override
@@ -59,7 +69,7 @@ public class VideoPlayerActivity extends ActionBarActivity {
 				video.setOnPreparedListener(new MediaPlayer.OnPreparedListener(){
 					@Override
 					public void onPrepared(MediaPlayer mp) {
-						Log.w("Video startTime :" , s+" ");
+//						Log.w("Video startTime :" , s+" ");
 						mp.seekTo(s);
 						mp.setLooping(true);
 					}
@@ -76,14 +86,14 @@ public class VideoPlayerActivity extends ActionBarActivity {
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
-		Log.w("RESUME : ","" );
+//		Log.w("RESUME : ","" );
 
         pingerThread.setRunning(true);
     }
     @Override
     public void onPause() {
         super.onPause();  // Always call the superclass method first
-		Log.w("PAWZ : ","" );
+//		Log.w("PAWZ : ","" );
 
         pingerThread.setRunning(false);
 
@@ -91,7 +101,7 @@ public class VideoPlayerActivity extends ActionBarActivity {
     @Override 
     public void onStop(){
     	super.onStop();
-		Log.w("STOP : ","" );
+//		Log.w("STOP : ","" );
 
     	pingerThread.setRunning(false);
     }

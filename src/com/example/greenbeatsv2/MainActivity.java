@@ -1,3 +1,12 @@
+/*
+*
+* Author: George Macrae 
+*
+* 2014
+*
+*/
+
+
 package com.example.greenbeatsv2;
 
 import android.content.Intent;
@@ -29,6 +38,8 @@ public class MainActivity extends ActionBarActivity {
 		
 		backGroundListener();
 	}
+	
+	// on touch switch to video player activity
 	private void backGroundListener() {
 		bg.setOnTouchListener(new OnTouchListener()
         {

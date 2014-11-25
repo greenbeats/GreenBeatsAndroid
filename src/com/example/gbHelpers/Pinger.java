@@ -1,3 +1,11 @@
+/*
+*
+* Author: George Macrae 
+*
+* 2014
+*
+*/
+
 package com.example.gbHelpers;
 
 import java.io.IOException;
@@ -22,7 +30,6 @@ public class Pinger extends AsyncTask<String, Void, Void> {
 	private long startTime;
 	private long timeStamp, userCount;
 	private String error = null;
-	
 	private String ret = null;
 	
 	private PingThread pingerThread;
@@ -30,14 +37,15 @@ public class Pinger extends AsyncTask<String, Void, Void> {
 	public Pinger(PingThread me) {
 			pingerThread = me;
 	}
+	
 	@Override 
 	protected void onPreExecute(){
 		startTime = System.currentTimeMillis();
 	}
 	@Override
 	protected Void doInBackground(String... urls) {
+		// ping the url
 		try{
-			
 			HttpGet httpGet = new HttpGet(URL);
 			ResponseHandler<String> responseHandler = new BasicResponseHandler();
 			String content = client.execute(httpGet, responseHandler);
@@ -45,17 +53,15 @@ public class Pinger extends AsyncTask<String, Void, Void> {
 			timeStamp = -1;
 			userCount = -1;
 			
-			Log.w("content : ", content);
+//			Log.w("content : ", content);
 			try {
 				JSONObject obj = new JSONObject(content);
 				timeStamp = obj.getLong("time");
 				userCount = obj.getLong("count");
-				Log.w("timestamp : ", timeStamp+ " "+ userCount);
+//				Log.w("timestamp : ", timeStamp+ " "+ userCount);
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
 			
 		}catch (ClientProtocolException e) {
             error = e.getMessage();
@@ -74,21 +80,23 @@ public class Pinger extends AsyncTask<String, Void, Void> {
 			Log.w("Error? : ", error);
 			ret = ("Output : "+ error);
 		}else{
-//			ret = ("Output : "+ content);
 			if(timeStamp != -1 && userCount != -1){
-				long delay = System.currentTimeMillis() - startTime;
-				Log.w("delay :" , delay+" ");
 				
-				//convert to millis
+				//convert to millis from nanos
 				String s = Long.toString(timeStamp);
-				s = s.substring(0,s.length() - 7);
-				Log.w("timestamp :" , s+" ");
+				long l = Long.parseLong(s)/1000000;
+				l = l%10000;
 				
-				pingerThread.setTimeStamp(Float.parseFloat(s));
+//				Log.w("timestamp pinger :" , l+" ");
+				
+				// set and notify pingerThread
+				pingerThread.setTimeStamp(l);
 				pingerThread.setUserCount(userCount);
+
+				long delay = System.currentTimeMillis() - startTime;
+//				Log.w("delay :" , delay+" ");
 				pingerThread.setDelay(delay);
 				
-//				pingerThread.setStamp(Float.parseFloat(content));
 			}
 		}
 	}
